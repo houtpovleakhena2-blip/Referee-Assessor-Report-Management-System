@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import reportLogo from '../assets/image.png'
 
 const competitions = ['WCL', 'CPL', 'U16', 'Futsal']
 
@@ -114,11 +115,11 @@ function FeedbackRows({ title }) {
     <div className="feedback-block">
       <div className="feedback-heading">
         <strong>{title}</strong>
-        <span>នាទី</span>
+        <span className="feedback-minutes-heading">នាទី</span>
       </div>
       {[1, 2, 3].map((number) => (
         <div className="feedback-row" key={`${title}-${number}`}>
-          <span>{number}</span>
+          <span className="feedback-number">{number}</span>
           <textarea rows="2" placeholder={title} />
           <input placeholder="នាទី" />
         </div>
@@ -130,17 +131,22 @@ function FeedbackRows({ title }) {
 function U16ReportTemplate() {
   return (
     <div className="u16-template">
-      <div className="template-header">
-        <div>
-          <h2>U16 Referee Assessor Report</h2>
+      {/* header */}
+      <div className="report-front-sheet">
+        <div className="report-cover-header">
+        <img className="report-crest" src={reportLogo} alt="FFC" />
+        <div className="report-cover-title">
+          <strong>របាយការណ៍</strong>
+          <strong>អ្នកវាយតម្លៃអាជ្ញាកណ្តាល</strong>
+          <h2>REFEREE ASSESSOR REPORT</h2>
         </div>
-        <label>
+        </div>
+        <label className="report-match-number">
           <span>លេខប្រកួត</span>
           <input placeholder="Match No." />
         </label>
-      </div>
 
-      <section className="template-card">
+      <section className="template-card report-info-card">
         <h3>A. ពិពណ៌នា និងព័ត៌មានការប្រកួត</h3>
         <div className="template-fields">
           <label><span>ពិពណ៌នាពីការប្រកួត/ពានរង្វាន់</span><input defaultValue="Cambodia Youth League U16" /></label> <br />
@@ -152,7 +158,7 @@ function U16ReportTemplate() {
         </div>
       </section>
 
-      <section className="template-card">
+      <section className="template-card report-info-card">
         <h3>2. មន្ត្រីការប្រកួត</h3>
         <div className="official-table">
           <span>តួនាទី</span>
@@ -179,7 +185,7 @@ function U16ReportTemplate() {
         </label>
       </section>
 
-      <section className="template-card">
+      <section className="template-card report-info-card">
         <h3>3. លទ្ធផលការប្រកួត</h3>
         <div className="result-table">
           {['លទ្ធផលចន្លោះវគ្គ', 'លទ្ធផលបញ្ចប់វគ្គ', 'លទ្ធផលវគ្គបន្ថែមម៉ោង', 'ទាត់ពីចំណុចប៉េណាល់ទី'].map((label) => (
@@ -193,7 +199,7 @@ function U16ReportTemplate() {
         </div>
       </section>
 
-      <section className="template-card">
+      <section className="template-card report-info-card">
         <h3>4. ឧប្បត្តិហេតុការប្រកួតដ៏សំខាន់</h3>
         <div className="incident-table">
           <span>ឧប្បត្តិហេតុ</span>
@@ -209,7 +215,7 @@ function U16ReportTemplate() {
         </div>
       </section>
 
-      <section className="template-card">
+      <section className="template-card report-info-card">
         <h3>5. ជ្រើសរើសវីដេអូខ្លីសម្រាប់ជាឧទ្ទេសបង្រៀន</h3>
         <div className="incident-table">
           <span>ចំណុចវីដេអូ</span>
@@ -225,7 +231,7 @@ function U16ReportTemplate() {
         </div>
       </section>
 
-      <section className="template-card">
+      <section className="template-card rating-reference-card">
         <h3>រង្វាស់នៃការវាយតម្លៃ</h3>
         <div className="rating-scale">
           {ratingScale.map(([score, text]) => (
@@ -237,7 +243,7 @@ function U16ReportTemplate() {
         </div>
       </section>
 
-      <section className="template-card">
+      <section className="template-card definition-reference-card">
         <h3>ពិពណ៌នា</h3>
         <div className="definition-table">
           {ratingDefinitions.map(([title, text]) => (
@@ -248,38 +254,53 @@ function U16ReportTemplate() {
           ))}
         </div>
       </section>
-
+      </div>
+       {/* assessment */}
       {assessmentSections.map((section) => (
-        <section className="template-card assessment-card" key={section.code}>
-          <h3>{section.code}. {section.title}</h3>
+        <section
+          className={section.code === 'B' ? 'assessment-sheet assessment-sheet-primary' : 'assessment-sheet'}
+          key={section.code}
+        >
+          <h3>
+            <span>{section.code}. {section.title}</span>
+          </h3>
           {section.groups.map((group) => (
             <div className="assessment-group" key={`${section.code}-${group.number}`}>
               <div className="assessment-title">
                 <strong>{group.number}</strong>
-                <span>{group.title}</span>
+                <div>
+                  <span>{group.title}</span>
+                  {group.descriptions.map((description) => (
+                    <p key={description}>{description}</p>
+                  ))}
+                </div>
               </div>
-              {group.descriptions.map((description) => (
-                <p key={description}>{description}</p>
-              ))}
               <FeedbackRows title="ចំណុចវិជ្ជមាន" />
               <FeedbackRows title="ចំណុច និងដំបូន្មានសម្រាប់ការអភិវឌ្ឍ" />
             </div>
           ))}
         </section>
       ))}
-
-      <section className="template-card">
-        <h3>F. កំណត់សម្គាល់បន្ថែម ប្រសិនបើមាន</h3>
-        <textarea className="large-note" rows="4" placeholder="កាប្រកួតទាន់ពេលវេលា" />
-      </section>
-
-      <section className="template-card">
-        <h3>G. ឈ្មោះអ្នកវាយតម្លៃ</h3>
-        <div className="signature-grid">
-          <label><span>ឈ្មោះអ្នកវាយតម្លៃ</span><input defaultValue="ហួត ពៅល្ខិណា" /></label>
-          <label><span>ហត្ថលេខា</span><textarea rows="3" /></label>
-          <label><span>កាលបរិច្ឆេទ</span><input type="date" /></label>
+      {/* footer */}
+      <section className="report-footer-sheet">
+        <div className="footer-note-row">
+          <span className="footer-code">F</span>
+          <strong>កំណត់សម្គាល់បន្ថែម ប្រសិនបើមាន</strong>
+          <input placeholder="ការប្រកួតទាន់ពេលវេលា" />
         </div>
+        <div className="footer-name-row">
+          <span className="footer-code">G</span>
+          <strong>ឈ្មោះអ្នកវាយតម្លៃ</strong>
+          <input defaultValue="ហួត ពៅល្ខិណា" />
+        </div>
+        <label className="footer-signature-row">
+          <span>ហត្ថលេខា</span>
+          <textarea rows="3" />
+        </label>
+        <label className="footer-date-row">
+          <span>កាលបរិច្ឆេទ</span>
+          <input type="date" />
+        </label>
       </section>
     </div>
   )
