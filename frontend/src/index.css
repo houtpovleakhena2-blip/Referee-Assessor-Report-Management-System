@@ -441,8 +441,12 @@ a {
 }
 
 .u16-template {
+  --report-min-width: 820px;
+  --report-index-col: 72px;
+  --report-minutes-col: 200px;
+  --report-line: #111827;
   display: grid;
-  gap: 18px;
+  gap: 0;
   margin-bottom: 24px;
   border-top: 1px solid #edf1f6;
   padding-top: 20px;
@@ -1027,6 +1031,157 @@ a {
   color: #020617;
 }
 
+/* Keep the report as one aligned worksheet while retaining horizontal access on small screens. */
+.u16-template > .assessment-sheet,
+.u16-template > .report-footer-sheet {
+  border-top: 0;
+}
+
+.report-front-sheet > .report-info-card,
+.report-front-sheet > .rating-reference-card,
+.report-front-sheet > .definition-reference-card {
+  overflow: visible;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+
+.report-front-sheet > .definition-reference-card {
+  border-bottom: 0;
+}
+
+.report-cover-header,
+.report-match-number,
+.report-info-card,
+.rating-reference-card h3,
+.definition-reference-card h3,
+.rating-reference-card .rating-scale,
+.definition-reference-card .definition-table {
+  min-width: var(--report-min-width);
+}
+
+.report-match-number {
+  grid-template-columns: var(--report-index-col) 1fr 130px var(--report-minutes-col);
+}
+
+.report-info-card h3 {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  padding: 4px 8px;
+  background: #f1f5f9;
+}
+
+.report-info-card h3::before {
+  content: none;
+}
+
+.report-info-card .template-fields,
+.report-info-card .official-table,
+.report-info-card .result-table,
+.report-info-card .incident-table {
+  gap: 0;
+  padding-left: 0;
+}
+
+.report-info-card .template-fields label {
+  display: grid;
+  min-height: 36px;
+  grid-template-columns: minmax(150px, 0.42fr) 1fr;
+  gap: 0;
+  border: 0;
+  padding: 0;
+}
+
+.report-info-card .template-fields .field-wide {
+  grid-column: 1 / -1;
+}
+
+.report-info-card .template-fields label span {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--report-line);
+  border-bottom: 1px solid var(--report-line);
+  background: #f8fafc;
+  padding: 4px 8px;
+}
+
+.report-info-card .template-fields label input,
+.report-info-card .official-row input,
+.report-info-card .official-row select,
+.report-info-card .result-row input,
+.report-info-card .incident-row input,
+.report-info-card .full-field input {
+  min-height: 36px;
+  border: 0;
+  border-right: 1px solid var(--report-line);
+  border-bottom: 1px solid var(--report-line);
+  border-radius: 0;
+  background: #ffffff;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+}
+
+.report-info-card .official-table {
+  grid-template-columns: 1.45fr 1.25fr 0.8fr 0.6fr;
+}
+
+.report-info-card .official-table > span,
+.report-info-card .incident-table > span {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  border-right: 1px solid var(--report-line);
+  border-bottom: 1px solid var(--report-line);
+  background: #f8fafc;
+  padding: 4px 8px;
+}
+
+.report-info-card .official-row strong,
+.report-info-card .result-row span {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  border-right: 1px solid var(--report-line);
+  border-bottom: 1px solid var(--report-line);
+  padding: 4px 8px;
+}
+
+.report-info-card .full-field {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.3fr) 1fr;
+  gap: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.report-info-card .full-field span {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  border-right: 1px solid var(--report-line);
+  border-bottom: 1px solid var(--report-line);
+  background: #f8fafc;
+  padding: 4px 8px;
+}
+
+.report-info-card .result-row,
+.report-info-card .incident-row {
+  gap: 0;
+}
+
+.report-info-card .incident-table,
+.report-info-card .incident-row {
+  grid-template-columns: 1.5fr 1fr var(--report-minutes-col);
+}
+
+.report-info-card input:focus,
+.report-info-card select:focus {
+  border-color: var(--report-line);
+  box-shadow: inset 0 0 0 2px #15803d;
+}
+
 .assessment-sheet {
   --sheet-line: #111827;
   --sheet-fill: #f1f1f1;
@@ -1043,7 +1198,7 @@ a {
 
 .assessment-sheet h3 {
   display: grid;
-  min-width: 820px;
+  min-width: var(--report-min-width);
   min-height: 30px;
   margin: 0;
   align-items: center;
@@ -1067,7 +1222,7 @@ a {
 .assessment-group,
 .feedback-block {
   display: grid;
-  min-width: 820px;
+  min-width: var(--report-min-width);
 }
 
 .assessment-title,
@@ -1075,7 +1230,7 @@ a {
 .feedback-row,
 .feedback-extra-row {
   display: grid;
-  grid-template-columns: 72px minmax(520px, 1fr) 200px;
+  grid-template-columns: var(--report-index-col) minmax(520px, 1fr) var(--report-minutes-col);
 }
 
 .assessment-title {
@@ -1249,6 +1404,7 @@ a {
 .report-form-actions {
   display: flex;
   justify-content: flex-end;
+  margin-top: 18px;
 }
 
 .report-form-actions .primary-button {
@@ -1260,8 +1416,8 @@ a {
 .footer-signature-row,
 .footer-date-row {
   display: grid;
-  min-width: 820px;
-  grid-template-columns: 58px 230px 1fr;
+  min-width: var(--report-min-width);
+  grid-template-columns: var(--report-index-col) 230px 1fr;
 }
 
 .footer-note-row,
@@ -1306,6 +1462,7 @@ a {
 }
 
 .footer-note-row input,
+.footer-note-row textarea,
 .footer-name-row input,
 .footer-date-row input,
 .footer-signature-row textarea {
@@ -1320,13 +1477,21 @@ a {
   font-size: 0.95rem;
 }
 
-.footer-note-row input {
+.footer-note-row input,
+.footer-note-row textarea {
   text-align: center;
+}
+
+.footer-auto-note {
+  min-height: 34px;
+  overflow: hidden;
+  resize: none;
+  line-height: 1.5;
 }
 
 .footer-signature-row,
 .footer-date-row {
-  grid-template-columns: 58px 230px 1fr;
+  grid-template-columns: var(--report-index-col) 230px 1fr;
 }
 
 .footer-signature-row span,
@@ -1348,6 +1513,7 @@ a {
 }
 
 .footer-note-row input:focus,
+.footer-note-row textarea:focus,
 .footer-name-row input:focus,
 .footer-date-row input:focus,
 .footer-signature-row textarea:focus {

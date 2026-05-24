@@ -11,6 +11,8 @@ const competitionNames = {
   Futsal: 'Futsal',
 }
 
+const scoreOptions = Array.from({ length: 31 }, (_, index) => (10 - (index / 10)).toFixed(1))
+
 const reports = [
   // { id: 'RPT-1001', competition: 'WCL', match: 'Phnom Penh Crown vs Visakha', assessor: 'Kim Sopheak', status: 'Submitted', score: 91 },
   // { id: 'RPT-1002', competition: 'CPL', match: 'Boeung Ket vs NagaWorld', assessor: 'Heng Piseth', status: 'Review', score: 86 },
@@ -251,16 +253,16 @@ function FeedbackRows({ title, selectionOptions = [], showExtraRows = false }) {
 
 function CompetitionReportTemplate({ competition }) {
   return (
-    <div className="u16-template" >
+    <div className="u16-template">
       {/* header */}
-      <div className="report-front-sheet" >
+      <div className="report-front-sheet">
         <div className="report-cover-header">
-        <img className="report-crest" src={reportLogo} alt="FFC" />
-        <div className="report-cover-title">
-          <strong>របាយការណ៍</strong>
-          <strong>អ្នកវាយតម្លៃអាជ្ញាកណ្តាល</strong>
-          <h2>REFEREE ASSESSOR REPORT</h2>
-        </div>
+          <img className="report-crest" src={reportLogo} alt="FFC" />
+          <div className="report-cover-title">
+            <strong>របាយការណ៍</strong>
+            <strong>អ្នកវាយតម្លៃអាជ្ញាកណ្តាល</strong>
+            <h2>REFEREE ASSESSOR REPORT</h2>
+          </div>
         </div>
         <label className="report-match-number">
           <span>លេខប្រកួត</span>
@@ -270,7 +272,7 @@ function CompetitionReportTemplate({ competition }) {
       <section className="template-card report-info-card">
         <h3>A. ពិពណ៌នា និងព័ត៌មានការប្រកួត</h3>
         <div className="template-fields">
-          <label><span>ពិពណ៌នាពីការប្រកួត/ពានរង្វាន់</span><input defaultValue={competitionNames[competition]} /></label> <br />
+          <label className="field-wide"><span>ពិពណ៌នាពីការប្រកួត/ពានរង្វាន់</span><input defaultValue={competitionNames[competition]} /></label>
           <label><span>ក្រុម ក</span><input /></label>
           <label><span>ក្រុម ខ</span><input /></label>
           <label><span>កីឡដ្ឋាន</span><input /></label>
@@ -289,14 +291,19 @@ function CompetitionReportTemplate({ competition }) {
           {['អាជ្ញាកណ្តាល', 'ជំនួយការអាជ្ញាកណ្តាលទី១', 'ជំនួយការអាជ្ញាកណ្តាលទី២', 'មន្ត្រីទី៤'].map((role) => (
             <div className="official-row" key={role}>
               <strong>{role}</strong>
-              <input placeholder="ឈ្មោះ" />
+              <input placeholder="" />
               <select defaultValue="">
                 <option value="" disabled>ជ្រើសរើស</option>
                 <option>កម្រិតខ្ពស់</option>
                 <option>កម្រិតមធ្យម</option>
                 <option>កម្រិតទាប</option>
               </select>
-              <input placeholder="ពិន្ទុ" />
+              <select defaultValue="" aria-label={`${role} ពិន្ទុ`}>
+                <option value="" disabled>ជ្រើសរើស</option>
+                {scoreOptions.map((score) => (
+                  <option key={score} value={score}>{score}</option>
+                ))}
+              </select>
             </div>
           ))}
         </div>
@@ -415,12 +422,19 @@ function CompetitionReportTemplate({ competition }) {
         <div className="footer-note-row">
           <span className="footer-code">F</span>
           <strong>កំណត់សម្គាល់បន្ថែម ប្រសិនបើមាន</strong>
-          <input placeholder="ការប្រកួតទាន់ពេលវេលា" />
+          <textarea
+            className="footer-auto-note"
+            rows="1"
+            onInput={(event) => {
+              event.currentTarget.style.height = 'auto'
+              event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`
+            }}
+          />
         </div>
         <div className="footer-name-row">
           <span className="footer-code">G</span>
           <strong>ឈ្មោះអ្នកវាយតម្លៃ</strong>
-          <input defaultValue="ហួត ពៅល្ខិណា" />
+          <input defaultValue="" />
         </div>
         <label className="footer-signature-row">
           <span>ហត្ថលេខា</span>
@@ -480,7 +494,7 @@ function ReportPage() {
         </div>
 
         <CompetitionReportTemplate key={selectedCompetition} competition={selectedCompetition} />
-        
+
       </section>
     </div>
   )
