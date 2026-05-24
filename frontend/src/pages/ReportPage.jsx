@@ -1,15 +1,22 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import reportLogo from '../assets/image.png'
 
 const competitions = ['WCL', 'CPL', 'U16', 'Futsal']
 
+const competitionNames = {
+  WCL: 'WCL',
+  CPL: 'CPL',
+  U16: 'Cambodia Youth League U16',
+  Futsal: 'Futsal',
+}
+
 const reports = [
-  { id: 'RPT-1001', competition: 'WCL', match: 'Phnom Penh Crown vs Visakha', assessor: 'Kim Sopheak', status: 'Submitted', score: 91 },
-  { id: 'RPT-1002', competition: 'CPL', match: 'Boeung Ket vs NagaWorld', assessor: 'Heng Piseth', status: 'Review', score: 86 },
-  { id: 'RPT-1003', competition: 'U16', match: 'Tiffy Army vs Kirivong', assessor: 'Meas Panha', status: 'Draft', score: 83 },
-  { id: 'RPT-1004', competition: 'WCL', match: 'Cambodia vs Thailand', assessor: 'Srey Rotha', status: 'Submitted', score: 89 },
-  { id: 'RPT-1005', competition: 'Futsal', match: 'Blue Dragon vs Tiger FC', assessor: 'Long Vicheka', status: 'Draft', score: 84 },
+  // { id: 'RPT-1001', competition: 'WCL', match: 'Phnom Penh Crown vs Visakha', assessor: 'Kim Sopheak', status: 'Submitted', score: 91 },
+  // { id: 'RPT-1002', competition: 'CPL', match: 'Boeung Ket vs NagaWorld', assessor: 'Heng Piseth', status: 'Review', score: 86 },
+  // // { id: 'RPT-1003', competition: 'U16', match: 'Tiffy Army vs Kirivong', assessor: 'Meas Panha', status: 'Draft', score: 83 },
+  // { id: 'RPT-1004', competition: 'WCL', match: 'Cambodia vs Thailand', assessor: 'Srey Rotha', status: 'Submitted', score: 89 },
+  // { id: 'RPT-1005', competition: 'Futsal', match: 'Blue Dragon vs Tiger FC', assessor: 'Long Vicheka', status: 'Draft', score: 84 },
 ]
 
 const ratingScale = [
@@ -110,7 +117,104 @@ const  assessmentSections = [
   },
 ]
 
-function FeedbackRows({ title }) {
+const assessmentSelectionOptions = [
+  'អនុត្តភាពឱ្យមានសុវត្ថិភាពនៅតំបន់',
+  'ការគ្រប់គ្រងកាយវិការ និងការរក្សារបៀបការប្រកួត',
+  'អនុវត្តការពិន័យត្រឹមត្រូវ',
+  'ការដាក់ទណ្ឌកម្ម',
+  'ការគ្រប់គ្រងពេលវេលា',
+  'ការចូលរួមជាមួយជំនួយការអាជ្ញាកណ្តាល ដោយប្រើសញ្ញាប្រកបដោយភាពច្បាស់លាស់',
+  'ការចូលរួមជាមួយកីឡាករ និងមន្ត្រីក្រុម',
+  'គ្រប់គ្រងស្ថានភាពទាក់តបដោយរហ័ស',
+  'គ្រប់គ្រងការបញ្ឈប់ការប្រកួត',
+  'គ្រប់គ្រងស្ថានភាពប៉ះទង្គិច',
+  'គ្រប់គ្រងស្ថានភាពតានតឹងដោយភាពស្ងប់ស្ងាត់',
+  'គ្រប់គ្រងការប្រកួតដោយមានការយល់ដឹងច្បាស់',
+  'ប្រើកាយវិការនិងសម្លេងបានច្បាស់លាស់',
+  'ផ្តល់ពិន័យ និងចំណាត់ការបានសមស្រប',
+  'ការទទួលស្គាល់ការប៉ះទង្គិចក្នុងតំបន់ពិន័យដោយច្បាស់',
+  'ការទទួលស្គាល់ការប្រើប្រាស់ដៃដោយចេតនា',
+  'ការទទួលស្គាល់ការប្រព្រឹត្តខុសដែលប៉ះពាល់ដល់ការប្រកួត',
+  'ការទទួលស្គាល់ស្ថានភាពក្រៅល្បែង',
+  'ការទទួលស្គាល់ស្ថានភាពបង្កគ្រោះថ្នាក់ ឬឥរិយាបថមិនសមរម្យ',
+  'ការទទួលស្គាល់ការរារាំងគូប្រកួត',
+  'ការទទួលស្គាល់នៃការប្រកួតប្រជែងគ្នាដោយត្រឹមត្រូវ',
+  'ការទទួលស្គាល់ការកាត់សេចក្តីដែលប៉ះពាល់ដល់លទ្ធផលប្រកួត',
+  'ស្មោះត្រង់',
+  'គ្រប់គ្រងដោយសមរម្យ',
+  'ប្រើភាសា',
+]
+
+const physicalSelectionOptions = [
+  'មុំទៅកាយវិការ',
+  'ការគិតគូរកាយនៅការលេងបាល់',
+  'ផ្តោតអារម្មណ៍',
+  'ការចូលរួម និងស្ថានភាពការប្រកួត',
+  'អំណាចកាយទ្រាំសម្រាប់នៅក្នុងការប្រកួត',
+  'រត់លឿន ខ្លាំង ត្រឹម',
+  'ជំហរ និងការលេង',
+  'ប្រើការផ្លាស់ប្តូរយ៉ាងមានការកំណត់',
+]
+
+const teamworkSelectionOptions = [
+  'ចែករំលែកព័ត៌មានសំខាន់ៗដែលបានមកពីកីឡាករឬក្រុមជំនួយ (បើសិន)',
+  'ជំនាញទាក់ទងនិងជាមួយមន្ត្រីការប្រកួតផ្សេងទៀត',
+  'ការចូលរួមជាមួយក្រុមជំនួយក្នុងការគ្រប់គ្រងការប្រកួត',
+  'មន្ត្រីការប្រកួតផ្សេងទៀតផ្តល់មតិយោបល់ល្អក្នុងការសម្រេចចិត្តនៅក្នុងការប្រកួត',
+  'មន្ត្រីការប្រកួតផ្សេងទៀតគឺជាអ្នកជួយគាំទ្រដែលមានប្រសិទ្ធភាព',
+  'អាជ្ញាកណ្តាលទទួលស្គាល់ប្រសិទ្ធភាពនៃការជួយពីមន្ត្រីការប្រកួតផ្សេងទៀត',
+  'មន្ត្រីការប្រកួតផ្សេងទៀតគាំទ្រការសម្រេចចិត្តបានត្រឹមត្រូវ',
+]
+
+const fourthOfficialSelectionOptions = [
+  'ចូលរួមជាមួយក្រុម',
+  'ជួយអាជ្ញាកណ្តាលគ្រប់គ្រងការប្រកួតនៅពេលចាំបាច់',
+  'កិច្ចសហការក្នុងការប្រកួត',
+  'ការគ្រប់គ្រងតំបន់បច្ចេកទេស អ្នកលេង និងបុគ្គលិកក្រុម',
+  'គ្រប់គ្រងទំនាក់ទំនង និងសម្របសម្រួល',
+  'គ្រប់គ្រងទីកន្លែងប្តូរកីឡាករ',
+  'គ្រប់គ្រងទីកន្លែងប្រកបដោយសុវត្ថិភាព',
+  'គ្រប់គ្រងកិច្ចការនៅតំបន់បច្ចេកទេស',
+  'ប្រើប្រាស់សម្ភារៈការងារ ក្តារប្តូរ និងម៉ោងបន្ថែម',
+]
+
+const assistantRefereeSelectionOptions = [
+  'គិតគូរកាយនៅការលេងបាល់',
+  'អនុត្តសញ្ញាទង់ ដោយច្បាស់ និងមើលសម្រេចទាន់ពេល',
+  'អនុត្តសញ្ញាទង់ ដោយច្បាស់ និងមើលសម្រេចស្ថានភាពអហ្វសាយ',
+  'ជំនាញការទាក់ទងជាមួយអាជ្ញាកណ្តាល',
+  'ជំនួយដល់អាជ្ញាកណ្តាលក្នុងស្ថានភាពប្រឈមមុខក្នុងការប្រកួត',
+  'ជំនួយការអាជ្ញាកណ្តាលផ្តល់សញ្ញាប្រកបដោយការយល់ដឹងនៅក្នុងការសម្រេច',
+  'ការសហការណ៍',
+  'សម្រេចចិត្តច្បាស់លាស់ពាក់ព័ន្ធការលេង',
+  'សម្រេចចិត្តច្បាស់លាស់ពាក់ព័ន្ធអហ្វសាយ',
+  'សម្រេចចិត្តច្បាស់លាស់ពាក់ព័ន្ធបាល់ចេញពីទីលាន',
+  'សម្រេចនៅទីតាំងត្រឹមត្រូវ',
+  'លក្ខខណ្ឌខាងកាយ / រត់លឿន / ការបត់បែន',
+  'បច្ចេកទេសទង់',
+  'ទីតាំងស្ថានភាពអហ្វសាយ',
+  'គ្រប់គ្រងទីតាំង',
+  'គ្រប់គ្រងចម្ងាយ',
+  'គ្រប់គ្រងការផ្លាស់ទីឱ្យបានត្រឹមត្រូវ',
+  'ជំហរ និងចលនានៅពេលបាល់ក្នុងលេង',
+  'ជំហរ និងចលនានៅពេលបាល់ចេញពីលេង',
+  'ទទួលស្គាល់ស្ថានភាពបំពាន ឬសកម្មភាពដែលមានឥទ្ធិពលដល់ការប្រកួត',
+  'ទទួលស្គាល់នៃការបំពានកីឡាករឬក្រុមមួយក្នុងការប្រកួត',
+  'សមត្ថភាពកាត់សេចក្តីនៅពេលសម្រេច',
+]
+
+const selectionOptionsByGroup = {
+  'B-1': assessmentSelectionOptions,
+  'B-2': physicalSelectionOptions,
+  'B-3': teamworkSelectionOptions,
+  'C-1': assistantRefereeSelectionOptions,
+  'D-1': assistantRefereeSelectionOptions,
+  'E-1': fourthOfficialSelectionOptions,
+}
+
+function FeedbackRows({ title, selectionOptions = [], showExtraRows = false }) {
+  const hasSelection = selectionOptions.length > 0
+
   return (
     <div className="feedback-block">
       <div className="feedback-heading">
@@ -118,21 +222,38 @@ function FeedbackRows({ title }) {
         <span className="feedback-minutes-heading">នាទី</span>
       </div>
       {[1, 2, 3].map((number) => (
-        <div className="feedback-row" key={`${title}-${number}`}>
-          <span className="feedback-number">{number}</span>
-          <textarea rows="2" placeholder={title} />
-          <input placeholder="នាទី" />
-        </div>
+        <Fragment key={`${title}-${number}`}>
+          <div className="feedback-row">
+            <span className="feedback-number">{number}</span>
+            {hasSelection ? (
+              <select className="feedback-select" defaultValue="">
+                <option value="" disabled />
+                {selectionOptions.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : (
+              <textarea rows="2" />
+            )}
+            <input />
+          </div>
+          {showExtraRows ? (
+            <div className="feedback-extra-row">
+              <span>ដំបូន្មាន</span>
+              <input />
+            </div>
+          ) : null}
+        </Fragment>
       ))}
     </div>
   )
 }
 
-function U16ReportTemplate() {
+function CompetitionReportTemplate({ competition }) {
   return (
-    <div className="u16-template">
+    <div className="u16-template" >
       {/* header */}
-      <div className="report-front-sheet">
+      <div className="report-front-sheet" >
         <div className="report-cover-header">
         <img className="report-crest" src={reportLogo} alt="FFC" />
         <div className="report-cover-title">
@@ -149,7 +270,7 @@ function U16ReportTemplate() {
       <section className="template-card report-info-card">
         <h3>A. ពិពណ៌នា និងព័ត៌មានការប្រកួត</h3>
         <div className="template-fields">
-          <label><span>ពិពណ៌នាពីការប្រកួត/ពានរង្វាន់</span><input defaultValue="Cambodia Youth League U16" /></label> <br />
+          <label><span>ពិពណ៌នាពីការប្រកួត/ពានរង្វាន់</span><input defaultValue={competitionNames[competition]} /></label> <br />
           <label><span>ក្រុម ក</span><input /></label>
           <label><span>ក្រុម ខ</span><input /></label>
           <label><span>កីឡដ្ឋាន</span><input /></label>
@@ -274,9 +395,17 @@ function U16ReportTemplate() {
                     <p key={description}>{description}</p>
                   ))}
                 </div>
+                <span className="assessment-selection-empty" aria-hidden="true" />
               </div>
-              <FeedbackRows title="ចំណុចវិជ្ជមាន" />
-              <FeedbackRows title="ចំណុច និងដំបូន្មានសម្រាប់ការអភិវឌ្ឍ" />
+              <FeedbackRows
+                title="ចំណុចវិជ្ជមាន"
+                selectionOptions={selectionOptionsByGroup[`${section.code}-${group.number}`] || []}
+              />
+              <FeedbackRows
+                title="ចំណុច និងដំបូន្មានសម្រាប់ការអភិវឌ្ឍ"
+                selectionOptions={selectionOptionsByGroup[`${section.code}-${group.number}`] || []}
+                showExtraRows
+              />
             </div>
           ))}
         </section>
@@ -302,6 +431,9 @@ function U16ReportTemplate() {
           <input type="date" />
         </label>
       </section>
+      <div className="report-form-actions">
+        <button className="primary-button" type="button">Submit</button>
+      </div>
     </div>
   )
 }
@@ -328,7 +460,6 @@ function ReportPage() {
           <span>Assessment</span>
           <h1>Reports</h1>
         </div>
-        <button className="primary-button" type="button">New Report</button>
       </div>
 
       <section className="panel">
@@ -348,28 +479,8 @@ function ReportPage() {
           </label>
         </div>
 
-        {selectedCompetition === 'U16' ? <U16ReportTemplate /> : null}
-
-        <div className="data-table">
-          <div className="data-head">
-            <span>Report</span>
-            <span>Competition</span>
-            <span>Match</span>
-            <span>Assessor</span>
-            <span>Score</span>
-            <span>Status</span>
-          </div>
-          {filteredReports.map((report) => (
-            <Link className="data-row report-link" to={`/reports/${report.id}`} key={report.id}>
-              <strong>{report.id}</strong>
-              <span>{report.competition}</span>
-              <span>{report.match}</span>
-              <span>{report.assessor}</span>
-              <span>{report.score}</span>
-              <span className="status-pill">{report.status}</span>
-            </Link>
-          ))}
-        </div>
+        <CompetitionReportTemplate key={selectedCompetition} competition={selectedCompetition} />
+        
       </section>
     </div>
   )

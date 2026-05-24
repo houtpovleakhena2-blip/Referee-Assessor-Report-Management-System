@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ChevronDown, ClipboardList, FileText, LayoutDashboard, ShieldCheck, Users } from 'lucide-react'
+import { ChevronDown, ClipboardList, FileText, LayoutDashboard, Users } from 'lucide-react'
+import reportLogo from '../../assets/image.png'
 import { NavLink, useLocation } from 'react-router-dom'
 
 const menuItems = [
@@ -17,10 +18,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="brand">
-        <ShieldCheck size={28} />
+        <img className="brand-logo" src={reportLogo} alt="FFC" />
         <div>
           <strong>Referee System</strong>
-          <span>Assessor Portal</span>
+          <span>Assessor </span>
         </div>
       </div>
 

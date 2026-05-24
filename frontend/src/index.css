@@ -58,6 +58,12 @@ a {
   padding: 10px 8px;
 }
 
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
 .brand strong {
   display: block;
   font-size: 1.25rem;
@@ -1066,7 +1072,8 @@ a {
 
 .assessment-title,
 .feedback-heading,
-.feedback-row {
+.feedback-row,
+.feedback-extra-row {
   display: grid;
   grid-template-columns: 72px minmax(520px, 1fr) 200px;
 }
@@ -1078,11 +1085,14 @@ a {
 
 .assessment-title strong,
 .assessment-title div,
+.assessment-selection-empty,
 .feedback-heading strong,
 .feedback-heading span,
 .feedback-number,
 .feedback-row textarea,
-.feedback-row input {
+.feedback-row select,
+.feedback-row input,
+.feedback-extra-row span {
   border-right: 1px solid var(--sheet-line);
 }
 
@@ -1116,6 +1126,12 @@ a {
   line-height: 1.35;
 }
 
+.assessment-selection-empty {
+  min-height: 38px;
+  display: block;
+  background: var(--sheet-fill);
+}
+
 .feedback-heading {
   min-height: 20px;
   align-items: center;
@@ -1138,17 +1154,28 @@ a {
   background: var(--sheet-fill);
 }
 
-.feedback-row {
+.feedback-row,
+.feedback-extra-row {
   min-height: 32px;
   border-bottom: 1px solid var(--sheet-line);
 }
 
-.feedback-number {
+.feedback-number,
+.feedback-extra-row span {
   background: #ffffff;
 }
 
+.feedback-extra-row span {
+  display: grid;
+  place-items: center;
+  color: #0f172a;
+  font-weight: 500;
+}
+
 .feedback-row textarea,
+.feedback-row select,
 .feedback-row input,
+.feedback-extra-row input,
 .large-note,
 .signature-grid textarea {
   width: 100%;
@@ -1166,19 +1193,37 @@ a {
   resize: vertical;
 }
 
+.feedback-row select {
+  min-height: 32px;
+  padding: 0 28px 0 8px;
+}
+
 .feedback-row input {
   min-height: 32px;
   padding: 0 8px;
+}
+
+.feedback-row input {
   background: var(--sheet-fill);
 }
 
+.feedback-extra-row input {
+  grid-column: 2 / 4;
+  min-height: 32px;
+  padding: 0 8px;
+}
+
 .feedback-row textarea:hover,
-.feedback-row input:hover {
+.feedback-row select:hover,
+.feedback-row input:hover,
+.feedback-extra-row input:hover {
   background: #f8fafc;
 }
 
 .feedback-row textarea:focus,
-.feedback-row input:focus {
+.feedback-row select:focus,
+.feedback-row input:focus,
+.feedback-extra-row input:focus {
   background: #ffffff;
   box-shadow: inset 0 0 0 2px var(--sheet-focus);
 }
@@ -1199,6 +1244,15 @@ a {
   background: #ffffff;
   color: #020617;
   font-family: "Khmer OS Battambang", "Noto Sans Khmer", Inter, system-ui, sans-serif;
+}
+
+.report-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-form-actions .primary-button {
+  min-width: 126px;
 }
 
 .footer-note-row,
