@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Fragment } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import reportLogo from '../assets/image.png'
 
 const competitions = ['WCL', 'CPL', 'U16', 'Futsal']
@@ -13,12 +13,115 @@ const competitionNames = {
 
 const scoreOptions = Array.from({ length: 31 }, (_, index) => (10 - (index / 10)).toFixed(1))
 
-const reports = [
-  // { id: 'RPT-1001', competition: 'WCL', match: 'Phnom Penh Crown vs Visakha', assessor: 'Kim Sopheak', status: 'Submitted', score: 91 },
-  // { id: 'RPT-1002', competition: 'CPL', match: 'Boeung Ket vs NagaWorld', assessor: 'Heng Piseth', status: 'Review', score: 86 },
-  // // { id: 'RPT-1003', competition: 'U16', match: 'Tiffy Army vs Kirivong', assessor: 'Meas Panha', status: 'Draft', score: 83 },
-  // { id: 'RPT-1004', competition: 'WCL', match: 'Cambodia vs Thailand', assessor: 'Srey Rotha', status: 'Submitted', score: 89 },
-  // { id: 'RPT-1005', competition: 'Futsal', match: 'Blue Dragon vs Tiger FC', assessor: 'Long Vicheka', status: 'Draft', score: 84 },
+const futsalMatchOfficials = [
+  'អាជ្ញាកណ្តាល១',
+  'អាជ្ញាកណ្តាលទី២',
+  'អាជ្ញាកណ្តាលទី៣',
+  'អ្នកកាន់ម៉ោង',
+]
+
+const futsalRatingScale = [
+  ['៩.០-១០', 'ល្អឥតខ្ចោះ'],
+  ['៨.៥-៨.៩', 'ល្អណាស់'],
+  ['៨.៣-៨.៤', 'ល្អ (កម្រិតដែលរំពឹងទុក)'],
+  ['៨.២', 'ត្រូវធ្វើឱ្យបានកាន់តែសមរម្យ'],
+  ['៨.០-៨.១', 'ត្រូវធ្វើឱ្យប្រសើរឡើង ប៉ុន្តែបានគ្រប់គ្រងការប្រកួត'],
+  ['៧.៩', 'មានការសម្រេចចិត្តមួយមិនបានត្រឹមត្រូវ ក្នុងចំណុចសំខាន់'],
+  ['៧.៨', 'មានការសម្រេចចិត្តមួយមិនបានត្រឹមត្រូវ និងត្រូវកែលម្អបន្ថែម'],
+  ['៧.៥-៧.៧', 'ការសម្រេចចិត្តខុសពីរលើហេតុការណ៍សំខាន់ៗ'],
+  ['៧.០-៧.៤', 'មិនពេញចិត្ត ទាមទារការកែលម្អការគ្រប់គ្រងការប្រកួត'],
+  ['៦.០-៦.៩', 'មិនអាចទទួលយកបាន'],
+]
+
+const futsalKeyNotes = [
+  'ការប្រកួតមានការលំបាកយ៉ាងខ្លាំងដោយមានស្ថានការណ៍លំបាកច្រើនសម្រាប់អាជ្ញាកណ្តាល',
+  'ការប្រកួតមានល្បឿនលឿន និងទាមទារការសម្រេចចិត្តត្រឹមត្រូវរបស់ក្រុមអាជ្ញាកណ្តាល',
+  'ការប្រកួតទទួលបានការគ្រប់គ្រងប្រកបដោយស្ថិរភាព និងការសហការល្អ',
+]
+
+const futsalAssessmentSheets = [
+  {
+    title: 'ការវាយតម្លៃអាជ្ញាកណ្តាល',
+    groups: [
+      {
+        number: '១',
+        title: 'គ្រប់គ្រងការប្រកួត',
+        descriptions: [
+          'ការប្រើច្បាប់ និងស្មារតីនៃការប្រកួតបានត្រឹមត្រូវ និងអនុវត្តបានល្អ',
+          'ការដាក់ទណ្ឌកម្ម ពិន័យផ្ទាល់ បាល់ស្លាប់ និងការគ្រប់គ្រងការប្រកួត',
+        ],
+      },
+      {
+        number: '២',
+        title: 'កម្លាំងកាយ និងចលនា',
+        descriptions: [
+          'អំណត់ ល្បឿន និងការបង្កើនល្បឿននៅពេលដែលចាំបាច់',
+          'ជំហរ និងការផ្លាស់ទីបានសមរម្យ',
+        ],
+      },
+      {
+        number: '៣',
+        title: 'ការងារក្រុម',
+        descriptions: [
+          'សហការណ៍ជាមួយអាជ្ញាកណ្តាលទី២ អាជ្ញាកណ្តាលទី៣ និងអ្នកកត់ត្រាលេខ',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'ការវាយតម្លៃអាជ្ញាកណ្តាលទី២',
+    groups: [
+      {
+        number: '១',
+        title: 'គ្រប់គ្រងការប្រកួត',
+        descriptions: [
+          'ការប្រើច្បាប់ និងស្មារតីនៃការប្រកួតបានត្រឹមត្រូវ',
+          'ការដាក់ទណ្ឌកម្ម ពិន័យផ្ទាល់ និងការគ្រប់គ្រងចង្វាក់លេង',
+        ],
+      },
+      {
+        number: '២',
+        title: 'កម្លាំងកាយ និងចលនា',
+        descriptions: [
+          'អំណត់ ល្បឿន និងការរត់ទៅតាមតំបន់ចាំបាច់',
+          'ជំហរ និងការផ្លាស់ទីរហ័ស',
+        ],
+      },
+      {
+        number: '៣',
+        title: 'ការងារក្រុម',
+        descriptions: [
+          'សហការជាមួយអាជ្ញាកណ្តាល អាជ្ញាកណ្តាលទី៣ និងអ្នកកត់ត្រាលេខសម្រាប់ការគ្រប់គ្រងប្រកួត',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'ការវាយតម្លៃអាជ្ញាកណ្តាលទី៣',
+    groups: [
+      {
+        number: '១',
+        title: 'ចំណុចសំខាន់ៗ',
+        descriptions: [
+          'សហការជាមួយអាជ្ញាកណ្តាល និងអ្នកកត់ត្រាលេខសម្រាប់ការផ្លាស់ប្តូរកីឡាករ',
+          'គ្រប់គ្រងតំបន់បច្ចេកទេស សុវត្ថិភាព និងវិន័យក្រុមបានល្អ',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'ការវាយតម្លៃអ្នកកាន់ម៉ោង',
+    groups: [
+      {
+        number: '១',
+        title: 'ចំណុចសំខាន់ៗ',
+        descriptions: [
+          'កត់ត្រាកំហុស បញ្ជីឈ្មោះ និងពិន្ទុបានត្រឹមត្រូវ',
+          'សហការជាមួយអាជ្ញាកណ្តាល និងអ្នកចាំម៉ោង',
+        ],
+      },
+    ],
+  },
 ]
 
 const ratingScale = [
@@ -251,7 +354,184 @@ function FeedbackRows({ title, selectionOptions = [], showExtraRows = false }) {
   )
 }
 
+function FutsalAssessmentRows({ title, options = [], recommendationTitle }) {
+  const hasOptions = options.length > 0
+
+  return (
+    <>
+      <div className="futsal-subheading">
+        <strong>{title}</strong>
+      </div>
+      {[1, 2, 3].map((row) => (
+        <Fragment key={`${title}-${row}`}>
+          <div className="futsal-assessment-row">
+            {hasOptions ? (
+              <select defaultValue={options[row - 1] || ''}>
+                <option value="" />
+                {options.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : (
+              <input className="futsal-text-input" />
+            )}
+          </div>
+          {recommendationTitle ? (
+            <div className="futsal-recommendation-row">
+              <span>{recommendationTitle}</span>
+              <input />
+            </div>
+          ) : null}
+        </Fragment>
+      ))}
+    </>
+  )
+}
+
+function FutsalAssessmentSheet({ sheet }) {
+  return (
+    <section className="futsal-sheet">
+      <h3>{sheet.title}</h3>
+      {sheet.groups.map((group) => (
+        <div className="futsal-assessment-group" key={`${sheet.title}-${group.number}`}>
+          <div className="futsal-assessment-title">
+            <strong>{group.number}. {group.title}</strong>
+            <span>Performance</span>
+            <div>
+              {group.descriptions.map((description) => (
+                <p key={description}>- {description}</p>
+              ))}
+            </div>
+          </div>
+          <FutsalAssessmentRows title="ចំណុចវិជ្ជមាន" options={group.positives} />
+          <FutsalAssessmentRows
+            title="ចំណុចដែលត្រូវអភិវឌ្ឍ"
+            options={group.positives}
+            recommendationTitle="យោបល់និងដំបូន្មាន"
+          />
+        </div>
+      ))}
+    </section>
+  )
+}
+
+function FutsalReportTemplate() {
+  return (
+    <div className="futsal-template">
+      <section className="futsal-cover-sheet">
+        <div className="futsal-cover-header">
+          <div />
+          <div className="futsal-cover-title">
+            <strong>សហព័ន្ធកីឡាបាល់ទាត់កម្ពុជា</strong>
+            <span>ការប្រកួត ពានរង្វាន់បាល់ទាត់ក្នុងសាល ឆ្នាំ២០២៥</span>
+            <b>កំណត់ហេតុប្រកួត</b>
+          </div>
+          <img src={reportLogo} alt="FFC" />
+        </div>
+
+        <div className="futsal-match-grid">
+          <span>ក្រុម ក</span>
+          <input defaultValue="" />
+          <span>ក្រុម ខ</span>
+          <input defaultValue="" />
+          <span>កីឡដ្ឋាន</span>
+          <input />
+          <span>ទីកន្លែង</span>
+          <input />
+          <span>កាលបរិច្ឆេទ</span>
+          <input type="date" />
+          <span>ម៉ោង</span>
+          <input type="time" />
+          <span>គ្រាប់បាល់សរុប</span>
+          <input defaultValue="" />
+          <span>ជ័យជំនះបានទៅលើ</span>
+          <input defaultValue="" />
+          <span>គ្រាប់បាល់កាត់ក្តីបញ្ចប់</span>
+          <input defaultValue="" />
+          <span>ជ័យជំនះបានទៅលើ</span>
+          <input defaultValue="" />
+        </div>
+
+        <div className="futsal-official-table">
+          <strong>មន្រ្តីការប្រកួត</strong>
+          <strong>ឈ្មោះ</strong>
+          <strong>សមាគម</strong>
+          <strong>ការវាយតម្លៃ</strong>
+          <strong>ពិន្ទុ</strong>
+          <strong>ពិន្ទុ</strong>
+          {futsalMatchOfficials.map((role, index) => (
+            <Fragment key={role}>
+              <span>{role}</span>
+              <input />
+              <input />
+              <select defaultValue="">
+                <option value="" />
+                <option>ធម្មតា</option>
+                <option>លំបាក</option>
+                <option>លំបាកខ្លាំង</option>
+              </select>
+              <select defaultValue={index < 4 ? '8.3' : ''}>
+                <option value="" />
+                {scoreOptions.map((score) => (
+                  <option key={score} value={score}>{score}</option>
+                ))}
+              </select>
+              <input />
+            </Fragment>
+          ))}
+          <span>អ្នកវាយតម្លៃអាជ្ញាកណ្តាល</span>
+          <input className="futsal-wide-input" />
+          <span></span>
+          <input className="futsal-wide-input" />
+        </div>
+      </section>
+
+      <section className="futsal-reference-sheet">
+        <h3>ពិន្ទុ</h3>
+        {futsalRatingScale.map(([score, text]) => (
+          <Fragment key={score}>
+            <strong>{score}</strong>
+            <span>{text}</span>
+          </Fragment>
+        ))}
+        <h3 className="futsal-reference-wide">កម្រិតការលំបាក</h3>
+        <p className="futsal-reference-wide">កម្រិតការលំបាកត្រូវបានវាយតម្លៃតាមចំនួន និងគុណភាពនៃស្ថានការណ៍សំខាន់ៗក្នុងការប្រកួត</p>
+        {futsalKeyNotes.map((note, index) => (
+          <Fragment key={note}>
+            <strong>{index + 1}</strong>
+            <span>{note}</span>
+          </Fragment>
+        ))}
+      </section>
+
+      {futsalAssessmentSheets.map((sheet) => (
+        <FutsalAssessmentSheet key={sheet.title} sheet={sheet} />
+      ))}
+
+      <section className="futsal-footer-sheet">
+        <h3>កំណត់សម្គាល់បន្ថែម</h3>
+        <textarea rows="5" />
+        <div className="futsal-signature-grid">
+          <strong>កាលបរិច្ឆេទ</strong>
+          <input type="date" />
+          <strong>អ្នកវាយតម្លៃ</strong>
+          <input />
+        </div>
+        <b>FFC</b>
+      </section>
+
+      <div className="report-form-actions">
+        <button className="primary-button" type="button">Submit</button>
+      </div>
+    </div>
+  )
+}
+
 function CompetitionReportTemplate({ competition }) {
+  if (competition === 'Futsal') {
+    return <FutsalReportTemplate />
+  }
+
   return (
     <div className="u16-template">
       {/* header */}
@@ -454,18 +734,11 @@ function CompetitionReportTemplate({ competition }) {
 
 function ReportPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const initialCompetition = searchParams.get('competition') || 'WCL'
-  const [selectedCompetition, setSelectedCompetition] = useState(initialCompetition)
-  const filteredReports = reports.filter((report) => report.competition === selectedCompetition)
+  const selectedCompetition = searchParams.get('competition') || 'WCL'
 
   const handleCompetitionChange = (competition) => {
-    setSelectedCompetition(competition)
     setSearchParams({ competition })
   }
-
-  useEffect(() => {
-    setSelectedCompetition(searchParams.get('competition') || 'WCL')
-  }, [searchParams])
 
   return (
     <div className="page-stack">

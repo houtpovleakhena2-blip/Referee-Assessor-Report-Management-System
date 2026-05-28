@@ -440,6 +440,328 @@ a {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
+.futsal-template {
+  --futsal-line: #111827;
+  --futsal-green: #c6dda0;
+  --futsal-blue: #062b69;
+  --futsal-soft: #efeee6;
+  display: grid;
+  gap: 0;
+  overflow-x: auto;
+  padding-top: 20px;
+  border-top: 1px solid #edf1f6;
+  color: #020617;
+  font-family: "Khmer OS Battambang", "Noto Sans Khmer", Inter, system-ui, sans-serif;
+}
+
+.futsal-cover-sheet,
+.futsal-reference-sheet,
+.futsal-sheet,
+.futsal-footer-sheet {
+  min-width: 850px;
+  border: 1px solid var(--futsal-line);
+  border-bottom: 0;
+  background: #ffffff;
+}
+
+.futsal-cover-header {
+  display: grid;
+  min-height: 134px;
+  grid-template-columns: 132px 1fr 132px;
+  align-items: center;
+  background: var(--futsal-blue);
+  color: #ffffff;
+}
+
+.futsal-cover-title {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.futsal-cover-title strong {
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.futsal-cover-title span {
+  color: #ffff00;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.futsal-cover-title b {
+  font-size: 1.05rem;
+}
+
+.futsal-cover-header img {
+  width: 92px;
+  height: 92px;
+  justify-self: center;
+  object-fit: contain;
+}
+
+.futsal-match-grid {
+  display: grid;
+  grid-template-columns: 120px 1.55fr 120px 1.55fr;
+}
+
+.futsal-match-grid span,
+.futsal-match-grid input,
+.futsal-official-table strong,
+.futsal-official-table span,
+.futsal-official-table input,
+.futsal-official-table select,
+.futsal-reference-sheet strong,
+.futsal-reference-sheet span,
+.futsal-reference-sheet p,
+.futsal-subheading strong,
+.futsal-subheading span,
+.futsal-assessment-row select,
+.futsal-assessment-row input,
+.futsal-recommendation-row span,
+.futsal-recommendation-row input,
+.futsal-footer-sheet textarea,
+.futsal-signature-grid strong,
+.futsal-signature-grid input {
+  min-height: 28px;
+  border-right: 1px solid var(--futsal-line);
+  border-bottom: 1px solid var(--futsal-line);
+}
+
+.futsal-match-grid span,
+.futsal-official-table strong,
+.futsal-reference-sheet h3,
+.futsal-sheet h3,
+.futsal-subheading strong,
+.futsal-subheading span,
+.futsal-footer-sheet h3,
+.futsal-signature-grid strong {
+  background: var(--futsal-green);
+  color: #0070c0;
+  font-weight: 900;
+}
+
+.futsal-match-grid span,
+.futsal-match-grid input,
+.futsal-official-table span,
+.futsal-official-table input,
+.futsal-official-table select,
+.futsal-reference-sheet strong,
+.futsal-reference-sheet span,
+.futsal-reference-sheet p,
+.futsal-assessment-row select,
+.futsal-assessment-row input,
+.futsal-recommendation-row span,
+.futsal-recommendation-row input,
+.futsal-signature-grid strong,
+.futsal-signature-grid input {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 0.95rem;
+}
+
+.futsal-match-grid input,
+.futsal-official-table input,
+.futsal-official-table select,
+.futsal-assessment-row select,
+.futsal-assessment-row input,
+.futsal-recommendation-row input,
+.futsal-footer-sheet textarea,
+.futsal-signature-grid input {
+  width: 100%;
+  border-top: 0;
+  border-left: 0;
+  border-radius: 0;
+  background: #ffffff;
+  color: #020617;
+  outline: 0;
+}
+
+.futsal-match-grid input,
+.futsal-official-table input,
+.futsal-official-table select,
+.futsal-assessment-row input,
+.futsal-recommendation-row input,
+.futsal-signature-grid input {
+  justify-content: center;
+  text-align: center;
+}
+
+.futsal-official-table {
+  display: grid;
+  grid-template-columns: 1.25fr 1.35fr 0.82fr 0.78fr 0.72fr 0.48fr;
+}
+
+.futsal-official-table strong {
+  display: grid;
+  place-items: center;
+  min-height: 30px;
+  color: #020617;
+}
+
+.futsal-official-table strong:first-child {
+  color: #0070c0;
+}
+
+.futsal-wide-input {
+  grid-column: span 2;
+}
+
+.futsal-reference-sheet {
+  display: grid;
+  grid-template-columns: 98px 1fr;
+}
+
+.futsal-reference-sheet h3,
+.futsal-reference-wide {
+  grid-column: 1 / -1;
+}
+
+.futsal-reference-sheet h3 {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  margin: 0;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.futsal-reference-sheet strong {
+  justify-content: center;
+  font-weight: 500;
+}
+
+.futsal-reference-sheet p {
+  margin: 0;
+  color: #0f3f83;
+  font-style: italic;
+}
+
+.futsal-sheet {
+  display: grid;
+}
+
+.futsal-sheet h3,
+.futsal-footer-sheet h3 {
+  display: grid;
+  min-height: 30px;
+  place-items: center;
+  margin: 0;
+  border-bottom: 1px solid var(--futsal-line);
+  font-size: 1rem;
+}
+
+.futsal-assessment-title {
+  display: grid;
+  grid-template-columns: 1fr 210px;
+  background: var(--futsal-soft);
+}
+
+.futsal-assessment-title strong,
+.futsal-assessment-title span,
+.futsal-assessment-title div {
+  border-right: 1px solid var(--futsal-line);
+  border-bottom: 1px solid var(--futsal-line);
+  padding: 3px 6px;
+}
+
+.futsal-assessment-title strong,
+.futsal-assessment-title span {
+  color: #0f3f83;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.futsal-assessment-title span {
+  display: grid;
+  place-items: center;
+}
+
+.futsal-assessment-title div {
+  grid-column: 1 / -1;
+  min-height: 54px;
+  padding-left: 84px;
+}
+
+.futsal-assessment-title p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.futsal-subheading,
+.futsal-assessment-row {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.futsal-recommendation-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.futsal-subheading strong {
+  color: #020617;
+}
+
+.futsal-assessment-row select,
+.futsal-assessment-row .futsal-text-input,
+.futsal-recommendation-row span {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.futsal-assessment-row .futsal-text-input {
+  padding-left: 8px;
+}
+
+.futsal-assessment-row input {
+  background: #f8fafc;
+}
+
+.futsal-recommendation-row span {
+  background: var(--futsal-soft);
+  font-weight: 900;
+}
+
+.futsal-assessment-row select:focus,
+.futsal-assessment-row input:focus,
+.futsal-recommendation-row input:focus,
+.futsal-match-grid input:focus,
+.futsal-official-table input:focus,
+.futsal-official-table select:focus,
+.futsal-footer-sheet textarea:focus,
+.futsal-signature-grid input:focus {
+  box-shadow: inset 0 0 0 2px #15803d;
+}
+
+.futsal-footer-sheet {
+  border-bottom: 1px solid var(--futsal-line);
+}
+
+.futsal-footer-sheet textarea {
+  min-height: 120px;
+  padding: 8px;
+  resize: vertical;
+}
+
+.futsal-signature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr 1fr 1.7fr;
+}
+
+.futsal-footer-sheet b {
+  display: grid;
+  min-height: 32px;
+  place-items: center;
+  background: var(--futsal-green);
+  color: #0070c0;
+  font-size: 1.25rem;
+}
+
 .u16-template {
   --report-min-width: 820px;
   --report-index-col: 72px;
